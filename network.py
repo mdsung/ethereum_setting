@@ -29,6 +29,9 @@ class Network:
 
     def run_geth(self, i, dir):
         command = f"geth \
+                    --nat none \
+                    --syncmode full \
+                    --ipcdisable \
                     --maxpeers {self.max_peer} \
                     --networkid {self.network_id} \
                     --metrics.influxdb \
@@ -38,33 +41,50 @@ class Network:
                     --ethstats {dir}:{self.monitoring_id}@{self.monitoring_ip}:{self.monitoring_port} \
                     --allow-insecure-unlock \
                     --datadir ./nodes/{dir} \
-                    --rpc \
-                    --rpcaddr \"0.0.0.0\" \
-                    --rpcport {self.rpc_port(i)} \
-                    --rpccorsdomain \"*\" \
-                    --rpcapi \"admin, db, eth, debug, miner, net, shh, txpool, personal, web3\" \
+                    --http \
+                    --http.addr \"0.0.0.0\" \
+                    --http.port {self.rpc_port(i)} \
+                    --http.corsdomain \"*\" \
+                    --http.api \"admin, eth, debug, miner, net, txpool, personal, web3\" \
                     --nodiscover \
                     --metrics \
                     --verbosity 6 \
-                    2>> ./nodes/{dir}/geth.log"
-        print(command)
-        run_command(command)    
+                    2>> {self.node_dir}/{dir}/geth.log &\
+"
+        stdout = run_command(command)    
         
     def parse_enode_url(self, i):
-        w3 = Web3(HTTPProvider(f"http://{self.rpc_ip}:{self.rpc_port(i)}"))
-        enode_url = w3.geth.admin.node_info()["enode"]
+        self.w3 = Web3(HTTPProvider(f"http://{self.rpc_ip}:{self.rpc_port(i)}"))
+        enode_url = ""
+        while True:
+            if self.w3.isConnected():
+                enode_url = self.w3.geth.admin.node_info()["enode"]        
+                break
+        
         self.enode_url_list.append(enode_url)
 
-    def add_static_json(self, dir):
-        file_name = f"{self.node_dir}/{dir}/static-nodes.json"
+    def add_static_json(self, i):
+        file_name = f"{self.node_dir}/{self.dir_name_list[i]}/static-nodes.json"
         write_file(file_name, json.dumps(self.enode_url_list))
+    
+    # def add_peer(self):
+    #     i = 0
+    #     self.w3 = Web3(HTTPProvider(f"http://{self.rpc_ip}:{self.rpc_port(i)}"))
+    #     print(self.enode_url_list)
+    #     for enode in self.enode_url_list:
+    #         print(enode)
+    #         print(type(enode))
+    #         self.w3.geth.admin.add_peer(enode)
 
     def create_network(self):
         for i, dir in enumerate(self.dir_name_list):
             self.run_geth(i, dir)
-            time.sleep(0.5) ## node를 run 한후 시간차이가 없으면 node가 실행되기 직전이라서 HTTP 연결이 되지 않는다. 
-            self.add_static_json(dir)
-            print("i")
+            self.parse_enode_url(i)
+            if i != len(self.dir_name_list) - 1:
+                self.add_static_json(i + 1)
+        
+
+
     
 
         

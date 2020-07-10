@@ -1,5 +1,5 @@
 import os 
-from method import run_command, validate_file
+from method import run_command, validate_file, validate_dir
 
 class Account:
     def __init__(self, node_dir):
@@ -21,9 +21,24 @@ class Account:
             cmd = f"""geth --datadir {self.parent_dir}/{dir} account new --password {self.password_file}"""
             run_command(cmd)
 
+    def check_public_key(self):
+        ## validate 한 후에 있으면 진행
+        while True:
+            flag = 0
+            for child_dir in self.child_dir_list:
+                dir_name = f"{self.parent_dir}/{child_dir}/keystore"
+                if not validate_dir(dir_name):
+                    continue
+                if len(os.listdir(dir_name)) > 0:
+                    file_name = os.listdir(dir_name)[0]
+                    flag += 1
+            if flag == len(self.child_dir_list):
+                break
+            
     def create_public_key_list(self):
-        self.public_key_list = [os.listdir(self.parent_dir + "/" + child_dir + "/keystore")[0][-40:] for child_dir in self.child_dir_list]
-
+        self.check_public_key()            
+        self.public_key_list = [os.listdir(f"{self.parent_dir}/{child_dir}/keystore")[0][-40:] for child_dir in self.child_dir_list]
+        
     def create(self):
         self.create_account()
         self.create_public_key_list()

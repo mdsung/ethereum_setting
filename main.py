@@ -48,11 +48,10 @@ def main():
     network = Network(**NETWORK_PARAMS)
     network.create_network()
 
+
     # Validate network
     rpc_ip = NETWORK_PARAMS["rpc"]["ip"]
-    print(rpc_ip)
     w3 = Web3(HTTPProvider(f"http://{rpc_ip}:10000"))
-    
     print(w3.net.peerCount)
 
 if __name__ =="__main__":

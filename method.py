@@ -25,8 +25,7 @@ def write_file(file_name, content):
     with open(file_name, "w") as f:
         f.write(content)
 
-def run_command(cmd):
-    popen = subprocess.Popen(cmd, shell=True)
-    # popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    # (stdoutdata, stderrdata) = popen.communicate()
-    # return stdoutdata, stderrdata
+def run_command(command):
+    p = subprocess.Popen(command, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines = True)
+    
+
