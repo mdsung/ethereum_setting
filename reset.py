@@ -2,19 +2,12 @@ import os
 import sys
 import psutil
 import subprocess
-from method import delete_directory
+from method import delete_dir, kill_process
 
 class Reset:
-    TARGET_NAME = "geth"
-    def kill_process(self):
-        for proc in psutil.process_iter(['pid', 'name']):
-            if (proc.info["name"]) and (self.TARGET_NAME in proc.info["name"].lower()):
-                process = psutil.Process(proc.info["pid"])
-                process.kill()
+    def __init__(self, node_dir):
+        self.node_dir = node_dir
 
-    def del_node_dir(self, node_dir):
-        delete_directory(node_dir)
-
-    def reset(self, node_dir):
-        self.kill_process()
-        self.del_node_dir(node_dir)
+    def reset(self):
+        kill_process("geth")
+        delete_dir(self.node_dir)

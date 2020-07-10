@@ -6,7 +6,7 @@ from web3 import Web3, HTTPProvider
 from method import run_command, write_file
 
 class Network:
-    def __init__(self, node_dir, max_peer, network_id, monitoring, influx_db, rpc):
+    def __init__(self, node_dir, max_peer, network_id, monitoring, influx_db, rpc, node):
         self.node_dir = node_dir
         self.dir_name_list = os.listdir(node_dir)
         self.max_peer = max_peer
@@ -21,9 +21,9 @@ class Network:
         self.influx_db_name = influx_db["db_name"]
         
         self.rpc_ip = rpc["ip"]
-        self.rpc_port = lambda i: 10000 + i
+        self.rpc_port = lambda i: rpc["port"] + i
         
-        self.node_port = lambda i: 30000 + i
+        self.node_port = lambda i: node["port"] + i
 
         self.enode_url_list = []
 
@@ -49,9 +49,8 @@ class Network:
                     --nodiscover \
                     --metrics \
                     --verbosity 6 \
-                    2>> {self.node_dir}/{dir}/geth.log &\
-"
-        stdout = run_command(command)    
+                    2>> {self.node_dir}/{dir}/geth.log &"
+        run_command(command)    
         
     def parse_enode_url(self, i):
         self.w3 = Web3(HTTPProvider(f"http://{self.rpc_ip}:{self.rpc_port(i)}"))
@@ -66,15 +65,6 @@ class Network:
     def add_static_json(self, i):
         file_name = f"{self.node_dir}/{self.dir_name_list[i]}/static-nodes.json"
         write_file(file_name, json.dumps(self.enode_url_list))
-    
-    # def add_peer(self):
-    #     i = 0
-    #     self.w3 = Web3(HTTPProvider(f"http://{self.rpc_ip}:{self.rpc_port(i)}"))
-    #     print(self.enode_url_list)
-    #     for enode in self.enode_url_list:
-    #         print(enode)
-    #         print(type(enode))
-    #         self.w3.geth.admin.add_peer(enode)
 
     def create_network(self):
         for i, dir in enumerate(self.dir_name_list):
