@@ -13,14 +13,15 @@ NUM_OF_NODE = 2
 
 NODE_DIR = "./nodes"
 NETWORK_DIR = "./Network"
+NETWORK_ID = 1234
 
-GENESIS_TEMPLATE_FILE = f"{NETWORK_DIR}/Genesis_template.json" 
+INITIAL_BALANCE = "3000000000000000000"
 GENESIS_FILE = f"{NETWORK_DIR}/Genesis.json" 
 
 NETWORK_PARAMS={
     "node_dir" : NODE_DIR,
     "max_peer" : 50,
-    "network_id" : 1234,
+    "network_id" : NETWORK_ID,
     "monitoring" : {"ip":"127.0.0.1", "port":"3000", "id":"hello"},
     "influx_db" : {"ip":"10.19.12.59", "port":"8086", "db_name":"test"},
     "rpc" : {"ip":"127.0.0.1", "port":10000},
@@ -43,9 +44,9 @@ def main():
     account.create()
 
     # Init Geth(Genesis)
-    genesis = Genesis(GENESIS_TEMPLATE_FILE, GENESIS_FILE)
+    genesis = Genesis(GENESIS_FILE, NETWORK_ID, NODE_DIR, INITIAL_BALANCE)
     genesis.create_genesis_json(account.public_key_list)
-    genesis.init_geth(NODE_DIR)
+    genesis.init_geth()
 
     # Create_network
     network = Network(**NETWORK_PARAMS)
