@@ -1,5 +1,5 @@
 import os 
-from method import run_command, validate_file, validate_dir
+from method import run_command, validate_file, validate_dir, write_file
 
 class Account:
     def __init__(self, node_dir):
@@ -8,13 +8,12 @@ class Account:
 
     def create_password_file(self):
         password = "password"
-        with open(self.password_file, "w") as f:
-            f.write(password)
+        write_file(self.password_file, password)
 
     def create_account(self):
         self.password_file = "./Network/password.txt"
         
-        if validate_file(self.password_file):
+        if not validate_file(self.password_file):
             self.create_password_file()
 
         for dir in os.listdir(self.parent_dir):

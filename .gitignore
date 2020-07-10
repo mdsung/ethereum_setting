@@ -1,0 +1,5 @@
+env/
+.vscode/
+nodes/
+Network/
+__pycache__/
