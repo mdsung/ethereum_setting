@@ -9,7 +9,7 @@ from account import Account
 from genesis import Genesis
 from network import Network
 
-NUM_OF_NODE = 2
+NUM_OF_NODE = int(os.environ["NODES"])
 
 NODE_DIR = "./nodes"
 NETWORK_DIR = "./Network"
