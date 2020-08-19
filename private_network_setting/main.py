@@ -22,7 +22,7 @@ NETWORK_PARAMS={
     "node_dir" : NODE_DIR,
     "max_peer" : 50,
     "network_id" : NETWORK_ID,
-    "monitoring" : {"ip":"127.0.0.1", "port":"3000", "id":"hello"},
+    "monitoring" : {"ip":"61.252.54.67", "port":"3000", "id":"hello"},
     "influx_db" : {"ip":"10.19.12.59", "port":"8086", "db_name":"test"},
     "rpc" : {"ip":"127.0.0.1", "port":10000},
     "node" : {"port":30000},

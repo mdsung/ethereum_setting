@@ -20,7 +20,7 @@ RUN git clone https://github.com/ethereum/go-ethereum \
 && cd go-ethereum \
 && make geth
 ENV PATH /go-ethereum/build/bin:$PATH
-`
+
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
 RUN mkdir go \
