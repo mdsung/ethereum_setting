@@ -20,7 +20,7 @@ RUN git clone https://github.com/ethereum/go-ethereum \
 && cd go-ethereum \
 && make geth
 ENV PATH /go-ethereum/build/bin:$PATH
-
+`
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
 RUN mkdir go \
@@ -31,5 +31,4 @@ WORKDIR /private_network_setting
 
 RUN pip3 install -r requirements.txt
 
-ENTRYPOINT ["python3", "main.py"]
-CMD ["tail", "-f", "/dev/null"]
+CMD python3 main.py; tail -f /dev/null
