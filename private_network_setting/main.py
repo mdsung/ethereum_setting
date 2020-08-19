@@ -32,28 +32,33 @@ def main():
     create_dir(NETWORK_DIR)
 
     # delete old data
+    print("=== reset old data ===")
     reset = Reset(NODE_DIR)
     reset.reset()
 
     # Create new data folder
+    print("=== create env folder ===")
     env = Env(NUM_OF_NODE, NODE_DIR)
     env.create()
 
     # Create Account
+    print("=== create accounts ===")
     account = Account(NODE_DIR)
     account.create()
 
     # Init Geth(Genesis)
+    print("=== init genesis ===")
     genesis = Genesis(GENESIS_FILE, NETWORK_ID, NODE_DIR, INITIAL_BALANCE)
     genesis.create_genesis_json(account.public_key_list)
     genesis.init_geth()
 
     # Create_network
+    print("=== create network ===")
     network = Network(**NETWORK_PARAMS)
     network.create_network()
 
-
     # Validate network
+    print("=== validate network ===")
     rpc_ip = NETWORK_PARAMS["rpc"]["ip"]
     w3 = Web3(HTTPProvider(f"http://{rpc_ip}:10000"))
     print(w3.net.peerCount)

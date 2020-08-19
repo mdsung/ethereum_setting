@@ -19,14 +19,17 @@ RUN apt-get update \
 RUN git clone https://github.com/ethereum/go-ethereum \
 && cd go-ethereum \
 && make geth
+ENV PATH /go-ethereum/build/bin:$PATH
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
 RUN mkdir go \
 && mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
-COPY . /network_setting
-RUN pip3 install -r /network_setting/requirements.txt
+COPY ./private_network_setting /private_network_setting
+WORKDIR /private_network_setting
 
-ENTRYPOINT ["cd network_setting/private_network_setting/"]
-CMD ["python3", "main.py"]
+RUN pip3 install -r requirements.txt
+
+ENTRYPOINT ["python3", "main.py"]
+CMD ["tail", "-f", "/dev/null"]
