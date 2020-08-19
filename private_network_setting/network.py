@@ -30,6 +30,7 @@ class Network:
     def run_geth(self, i, dir):
         command = f"geth \
                     --nat none \
+                    --nousb \
                     --syncmode full \
                     --ipcdisable \
                     --maxpeers {self.max_peer} \

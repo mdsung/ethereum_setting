@@ -94,6 +94,7 @@ for index, row in dfAdmSample.iterrows():
 
     # transactionHistory[0]['transactionHash']
 transactionOutput = pd.DataFrame(transactionHistory)
+print("===============")
 print(transactionOutput)
 
 mining_stop(miningNodeList)
