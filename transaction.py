@@ -1,19 +1,28 @@
+import time
+
 from web3 import Web3, HTTPProvider
 
-import pymysql
-import pandas as pd
-import numpy as np
-import json
-import random 
-import codecs
-import datetime
-import random
+# import pymysql
+# import pandas as pd
+# import numpy as np
+# import json
+# import random 
+# import codecs
+# import datetime
+# import random
 
-numOfNodes = 10
+numOfNodes = 3
+w3_list = []
 for i in range(numOfNodes+1):
     print(f"i={i}")
     w3 = Web3(HTTPProvider(f"http://127.0.0.1:{10000+i}"))
+    w3_list.append(w3)
     w3.geth.miner.start(1)
+
+while True:
+    print([w.eth.getBlock('latest')['number'] for w in w3_list])
+    time.sleep(5)
+
 
 # conn = pymysql.connect(host="103.22.220.149", 
 #                        port = 13306, 

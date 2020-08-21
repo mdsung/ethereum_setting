@@ -9,10 +9,11 @@ from account import Account
 from genesis import Genesis
 from network import Network
 
-NUM_OF_NODE = int(os.environ["NODES"])
+# NUM_OF_NODE = int(os.environ["NODES"])
+NUM_OF_NODE = 3
 
-NODE_DIR = "./nodes"
-NETWORK_DIR = "./Network"
+NODE_DIR = "../nodes"
+NETWORK_DIR = "../Network"
 NETWORK_ID = 1234
 
 INITIAL_BALANCE = "3000000000000000000"
@@ -43,7 +44,7 @@ def main():
 
     # Create Account
     print("=== create accounts ===")
-    account = Account(NODE_DIR)
+    account = Account(NODE_DIR, NETWORK_DIR)
     account.create()
 
     # Init Geth(Genesis)

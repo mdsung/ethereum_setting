@@ -41,7 +41,7 @@ class Network:
                     --port {self.node_port(i)} \
                     --ethstats {dir}:{self.monitoring_id}@{self.monitoring_ip}:{self.monitoring_port} \
                     --allow-insecure-unlock \
-                    --datadir ./nodes/{dir} \
+                    --datadir {self.node_dir}/{dir} \
                     --http \
                     --http.addr \"0.0.0.0\" \
                     --http.port {self.rpc_port(i)} \
@@ -51,6 +51,7 @@ class Network:
                     --metrics \
                     --verbosity 6 \
                     2>> {self.node_dir}/{dir}/geth.log &"
+        print(command)
         run_command(command)    
         
     def parse_enode_url(self, i):
