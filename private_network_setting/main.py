@@ -9,11 +9,10 @@ from account import Account
 from genesis import Genesis
 from network import Network
 
-# NUM_OF_NODE = int(os.environ["NODES"])
-NUM_OF_NODE = 3
+NUM_OF_NODE = int(os.environ["NODES"])
 
-NODE_DIR = "../nodes"
-NETWORK_DIR = "../Network"
+NODE_DIR = "./nodes"
+NETWORK_DIR = "./Network"
 NETWORK_ID = 1234
 
 INITIAL_BALANCE = "3000000000000000000"
