@@ -1,25 +1,27 @@
 import time
+import random
+import random 
+import datetime
 
-from web3 import Web3, HTTPProvider
 
 import pymysql
 import pandas as pd
 import numpy as np
-import json
-import random 
-import codecs
-import datetime
-import random
+from web3 import Web3, HTTPProvider
 
 numOfNodes = 10
-w3_list = []
+blockchain_ip = "103.22.220.153"
+database_ip = "103.22.220.149"
+
+## mining start
 for i in range(numOfNodes+1):
     print(f"i={i}")
-    w3 = Web3(HTTPProvider(f"http://127.0.0.1:{10000+i}"))
-    w3_list.append(w3)
+    w3 = Web3(HTTPProvider(f"http://{blockchain_ip}:{10000+i}"))
     w3.geth.miner.start(1)
+    time.sleep(10)
 
-conn = pymysql.connect(host="103.22.220.149", 
+## db connect
+conn = pymysql.connect(host=database_ip, 
                        port = 13306, 
                        user="mindong", 
                        passwd='yonsei2020!',  
@@ -48,27 +50,9 @@ sampleSubjectId
 
 dfAdmSample = dfAdm[dfAdm["SUBJECT_ID"].isin(sampleSubjectId)]
 
-w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:10000"))
+w3 = Web3(Web3.HTTPProvider(f"http://{blockchain_ip}:10000"))
 hospitalNodeAccount = w3.geth.personal.listAccounts()[0]
 print(hospitalNodeAccount)
-
-def mining_start(node = numOfNodes+1):
-    ## random으로 정해진 node 수만큼 추출하여 mining할 node를 임의로 정한다. 
-    miningNodeList = random.sample(range(numOfNodes+1), node)
-    ##miningNodeList = [0]
-    for i in miningNodeList:
-        print(i)
-        w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:" + str(10000+i)))
-        w3.geth.miner.start(1)
-    return miningNodeList
-
-def mining_stop(miningNodList):
-    for i in miningNodeList:
-        w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:" + str(10000+i)))
-        w3.geth.miner.stop()
-
-miningNodeList = mining_start()
-numOfMiningNodes = len(miningNodeList)
 
 ## String to Hex / Hex to string
 def stringtoHex(string):
@@ -87,7 +71,7 @@ for index, row in dfAdmSample.iterrows():
     
     ## Get the patient node account 
     node = sampleSubjectId.index(row["SUBJECT_ID"]) + 1
-    w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:" + str(10000 + node)))
+    w3 = Web3(Web3.HTTPProvider(f"http://{blockchain_ip}:{10000 + node}"))
     patientNodeAccount = w3.geth.personal.listAccounts()[0]
     w3.geth.personal.unlockAccount(patientNodeAccount, 'password')
     
@@ -107,4 +91,3 @@ transactionOutput = pd.DataFrame(transactionHistory)
 print("===============")
 print(transactionOutput)
 
-mining_stop(miningNodeList)
