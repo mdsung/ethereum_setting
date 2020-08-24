@@ -32,7 +32,7 @@ docker-compose up -d
 01_send_transaction.py
 
 ### Get Transaction data Example
-02_get_transaction.py
+02_get_input_data.py
 
 ## Release History
 
