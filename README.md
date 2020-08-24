@@ -1,7 +1,10 @@
 # Ethereum Setting(Python 3.6.8)
 > Set the private network with python
 
-In order to simulate Ethereum data transaction, set the private ethereum network with python
+In orderto simulate Ethereum data transaction, set the private ethereum network with python
+
+## Network Overview
+![network](/image_assets/network_overview.png)
 
 ## Prerequisite
     * python 3.6
