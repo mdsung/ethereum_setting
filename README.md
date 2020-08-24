@@ -17,20 +17,32 @@ pip install -r requirements.txt
 ```
 
 ## Example
-
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
-
+### Docker file build
 ```sh
-python main.py
+docker build . -t mdsung/ubuntu_geth
 ```
+
+### Docker compose 
+You can set the number of node in the docker with modifying docker-compose file
+```sh
+docker-compose up -d
+```
+
+### Send Transaction Example
+01_send_transaction.py
+
+### Get Transaction data Example
+02_get_transaction.py
 
 ## Release History
 
 * 0.0.1
     * Run the Private Network 
-
+* 0.1
+   * Run the Private Network on Docker
+   * Send Transaction and Get Transaction data 
+   
 ## Meta
-
 MinDong Sung – sungmindong@gmail.com
 
 [https://github.com/mdsung/ethereum_setting
